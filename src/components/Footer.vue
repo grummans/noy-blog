@@ -63,24 +63,6 @@ const quickLinks = [
   { name: 'About', path: '/about' }
 ]
 
-const socialLinks = [
-  {
-    name: 'GitHub',
-    url: 'https://github.com',
-    icon: 'IconGitHub'
-  },
-  {
-    name: 'Twitter',
-    url: 'https://twitter.com',
-    icon: 'IconTwitter'
-  },
-  {
-    name: 'LinkedIn',
-    url: 'https://linkedin.com',
-    icon: 'IconLinkedIn'
-  }
-]
-
 // Simple icon components
 const IconGitHub = {
   template: `
@@ -105,4 +87,22 @@ const IconLinkedIn = {
     </svg>
   `
 }
+
+const socialLinks = [
+  {
+    name: 'GitHub',
+    url: 'https://github.com',
+    icon: IconGitHub
+  },
+  {
+    name: 'Twitter',
+    url: 'https://twitter.com',
+    icon: IconTwitter
+  },
+  {
+    name: 'LinkedIn',
+    url: 'https://linkedin.com',
+    icon: IconLinkedIn
+  }
+]
 </script>
