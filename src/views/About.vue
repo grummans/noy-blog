@@ -30,11 +30,11 @@
             </h3>
             
             <ul class="text-gray-600 dark:text-gray-400 mb-6 space-y-2">
-              <li>• Frontend Development with Vue.js, React, and TypeScript</li>
-              <li>• Backend Development with Node.js and Python</li>
-              <li>• Cloud Architecture and DevOps practices</li>
-              <li>• Technical Writing and Community Engagement</li>
-              <li>• Open Source Contributions</li>
+              <li>Frontend Development with Vue.js, React, and TypeScript</li>
+              <li>Backend Development with Node.js and Python</li>
+              <li>Cloud Architecture and DevOps practices</li>
+              <li>Technical Writing and Community Engagement</li>
+              <li>Open Source Contributions</li>
             </ul>
 
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
@@ -113,7 +113,7 @@ const technologies = [
 const socialLinks = [
   {
     name: 'GitHub',
-    url: 'https://github.com'
+    url: 'https://github.com/grummans'
   },
   {
     name: 'Twitter',
@@ -125,7 +125,7 @@ const socialLinks = [
   },
   {
     name: 'Email',
-    url: 'mailto:hello@example.com'
+    url: 'mailto:nguyenhaikiller@gmail.com'
   }
 ]
 </script>
