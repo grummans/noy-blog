@@ -63,8 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useDark, useToggle } from '@vueuse/core'
+import { ref } from 'vue'
+import { useDark } from '@vueuse/core'
 
 // Configure useDark to work with Tailwind CSS
 const isDark = useDark({

@@ -99,10 +99,9 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { format } from 'date-fns'
 
-const route = useRoute()
 const router = useRouter()
 
 const props = defineProps<{
