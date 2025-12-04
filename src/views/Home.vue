@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="text-center py-16">
       <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-        Welcome to GrummansBlog
+        Welcome to Grummans Blog
       </h1>
       <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
         A modern blog exploring technology, development, and digital innovation. 
@@ -21,7 +21,7 @@
         </RouterLink>
         <RouterLink 
           to="/about" 
-          class="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium"
+          class="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors font-medium"
         >
           About Me
         </RouterLink>
@@ -44,7 +44,7 @@
         <article 
           v-for="post in featuredPosts" 
           :key="post.slug"
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow"
+          class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-md transition-shadow"
         >
           <div class="p-6">
             <div class="flex items-center gap-2 mb-3">
@@ -87,7 +87,7 @@
           <input 
             type="email" 
             placeholder="Enter your email" 
-            class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
+            class="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:text-white"
           >
           <button class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
             Subscribe

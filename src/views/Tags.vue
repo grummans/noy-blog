@@ -8,20 +8,20 @@
     </div>
 
     <!-- Tag Cloud -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8 mb-8">
+    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-8 mb-8">
       <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Popular Tags</h2>
       <div class="flex flex-wrap gap-3">
         <RouterLink
           v-for="tag in sortedTags"
           :key="tag.name"
           :to="`/tags/${tag.name.toLowerCase()}`"
-          class="inline-flex items-center px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
+          class="inline-flex items-center px-4 py-2 rounded-full border border-gray-300 dark:border-gray-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
           :style="{ fontSize: getTagSize(tag.count) + 'rem' }"
         >
           <span class="text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400">
             {{ tag.name }}
           </span>
-          <span class="ml-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">
+          <span class="ml-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full">
             {{ tag.count }}
           </span>
         </RouterLink>
@@ -29,16 +29,16 @@
     </div>
 
     <!-- Tag List -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
-      <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+      <div class="p-6 border-b border-gray-200 dark:border-gray-800">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white">All Tags</h2>
       </div>
       
-      <div class="divide-y divide-gray-200 dark:divide-gray-700">
+      <div class="divide-y divide-gray-200 dark:divide-gray-800">
         <div
           v-for="tag in sortedTags"
           :key="tag.name"
-          class="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+          class="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
         >
           <div class="flex items-center justify-between">
             <div>
@@ -73,7 +73,7 @@
       <div
         v-for="category in featuredCategories"
         :key="category.name"
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6"
+        class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6"
       >
         <div class="flex items-center justify-between mb-4">
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -95,7 +95,7 @@
           >
             <RouterLink
               :to="`/posts/${post.slug}`"
-              class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+              class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <h4 class="font-medium text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 mb-1">
                 {{ post.title }}
