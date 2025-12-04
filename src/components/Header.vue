@@ -1,12 +1,12 @@
 <template>
-  <header class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b border-gray-200 dark:border-gray-800">
+  <header class="sticky top-0 z-50 bg-white/95 dark:bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 border-b border-gray-200 dark:border-gray-900">
     <nav class="container mx-auto px-4 py-4">
       <div class="flex items-center justify-between">
         <RouterLink 
           to="/" 
           class="text-2xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
         >
-          GrummansBlog
+          Grummans Blog
         </RouterLink>
         
         <div class="hidden md:flex items-center space-x-8">
@@ -22,7 +22,7 @@
           
           <button 
             @click="toggleTheme" 
-            class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            class="p-2 rounded-lg bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
             aria-label="Toggle theme"
           >
             <svg v-if="isDark" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -36,7 +36,7 @@
         
         <button 
           @click="mobileMenuOpen = !mobileMenuOpen"
-          class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+          class="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -45,7 +45,7 @@
       </div>
       
       <!-- Mobile menu -->
-      <div v-if="mobileMenuOpen" class="md:hidden mt-4 py-4 border-t border-gray-200 dark:border-gray-800">
+      <div v-if="mobileMenuOpen" class="md:hidden mt-4 py-4 border-t border-gray-200 dark:border-gray-900">
         <div class="flex flex-col space-y-4">
           <RouterLink 
             v-for="item in navItems" 
@@ -63,8 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useDark, useToggle } from '@vueuse/core'
+import { ref } from 'vue'
+import { useDark } from '@vueuse/core'
 
 // Configure useDark to work with Tailwind CSS
 const isDark = useDark({
