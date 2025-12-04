@@ -40,23 +40,55 @@
         </RouterLink>
       </div>
       
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-12">
+        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <p class="text-gray-600 dark:text-gray-400">Loading featured posts...</p>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="text-center py-12">
+        <p class="text-red-500 mb-4">{{ error }}</p>
+        <button 
+          @click="fetchFeaturedPosts"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Try again
+        </button>
+      </div>
+
+      <!-- Featured Posts Grid -->
+      <div v-else-if="featuredPosts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <article 
           v-for="post in featuredPosts" 
-          :key="post.slug"
+          :key="post.id"
           class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden hover:shadow-md transition-shadow"
         >
+          <!-- Featured Image -->
+          <div v-if="post.featuredImageUrl" class="aspect-video overflow-hidden">
+            <img 
+              :src="post.featuredImageUrl" 
+              :alt="post.title"
+              class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+            >
+          </div>
+          
           <div class="p-6">
-            <div class="flex items-center gap-2 mb-3">
+            <div class="flex items-center gap-2 mb-3 flex-wrap">
               <span 
-                v-for="tag in post.tags" 
-                :key="tag"
+                class="inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded"
+              >
+                {{ post.category.name }}
+              </span>
+              <span 
+                v-for="tag in post.tags.slice(0, 2)" 
+                :key="tag.id"
                 class="inline-block px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded"
               >
-                {{ tag }}
+                {{ tag.name }}
               </span>
             </div>
-            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
               <RouterLink 
                 :to="`/posts/${post.slug}`" 
                 class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
@@ -64,13 +96,24 @@
                 {{ post.title }}
               </RouterLink>
             </h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">{{ post.description }}</p>
+            <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">{{ post.excerpt }}</p>
             <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
-              <time :datetime="post.pubDate">{{ formatDate(post.pubDate) }}</time>
-              <span>{{ post.readTime }} min read</span>
+              <time :datetime="post.updatedAt">{{ formatDate(post.updatedAt) }}</time>
+              <span>{{ post.readingTimeMinutes }} min read</span>
             </div>
           </div>
         </article>
+      </div>
+
+      <!-- No Featured Posts -->
+      <div v-else class="text-center py-12">
+        <p class="text-gray-600 dark:text-gray-400">No featured posts yet.</p>
+        <RouterLink 
+          to="/posts" 
+          class="text-blue-600 dark:text-blue-400 hover:underline mt-2 inline-block"
+        >
+          Browse all posts →
+        </RouterLink>
       </div>
     </section>
 
@@ -99,36 +142,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { format } from 'date-fns'
+import { postsApi } from '@/services/api'
+import type { PostListItem } from '@/types'
 
-// Sample featured posts data
-const featuredPosts = ref([
-  {
-    slug: 'getting-started-vue-3',
-    title: 'Getting Started with Vue 3 and TypeScript',
-    description: 'Learn how to set up a modern Vue 3 project with TypeScript, Vite, and best practices for scalable development.',
-    tags: ['Vue', 'TypeScript', 'Frontend'],
-    pubDate: '2024-01-15T00:00:00Z',
-    readTime: 8
-  },
-  {
-    slug: 'tailwind-css-tips',
-    title: '10 Tailwind CSS Tips for Better UI Design',
-    description: 'Discover advanced Tailwind CSS techniques to create beautiful and responsive user interfaces.',
-    tags: ['CSS', 'Design', 'Tailwind'],
-    pubDate: '2024-01-10T00:00:00Z',
-    readTime: 6
-  },
-  {
-    slug: 'modern-javascript-features',
-    title: 'Modern JavaScript Features You Should Know',
-    description: 'Explore the latest JavaScript features that can improve your code quality and developer experience.',
-    tags: ['JavaScript', 'ES6+', 'Development'],
-    pubDate: '2024-01-05T00:00:00Z',
-    readTime: 10
+// State
+const featuredPosts = ref<PostListItem[]>([])
+const loading = ref(true)
+const error = ref<string | null>(null)
+
+// Fetch featured posts
+const fetchFeaturedPosts = async () => {
+  loading.value = true
+  error.value = null
+  
+  try {
+    featuredPosts.value = await postsApi.getFeatured()
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : 'Failed to load featured posts'
+  } finally {
+    loading.value = false
   }
-])
+}
+
+onMounted(fetchFeaturedPosts)
 
 const formatDate = (dateString: string) => {
   return format(new Date(dateString), 'MMM dd, yyyy')

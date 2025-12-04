@@ -1,14 +1,60 @@
 <template>
-  <div v-if="post" class="max-w-4xl mx-auto">
+  <!-- Loading State -->
+  <div v-if="loading" class="max-w-4xl mx-auto text-center py-16">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+    <p class="text-gray-600 dark:text-gray-400">Loading post...</p>
+  </div>
+
+  <!-- Error State -->
+  <div v-else-if="error" class="max-w-4xl mx-auto text-center py-16">
+    <div class="text-red-500 mb-4">
+      <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+      </svg>
+    </div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Failed to load post</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">{{ error }}</p>
+    <div class="flex gap-4 justify-center">
+      <button 
+        @click="fetchPost"
+        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+      >
+        Try again
+      </button>
+      <RouterLink
+        to="/posts"
+        class="px-6 py-3 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors font-medium"
+      >
+        Browse All Posts
+      </RouterLink>
+    </div>
+  </div>
+
+  <!-- Post Content -->
+  <div v-else-if="post" class="max-w-4xl mx-auto">
     <!-- Post Header -->
     <header class="mb-8">
-      <div class="flex items-center gap-2 mb-4">
+      <!-- Featured Image -->
+      <div v-if="post.featuredImageUrl" class="mb-6 rounded-lg overflow-hidden">
+        <img 
+          :src="post.featuredImageUrl" 
+          :alt="post.title"
+          class="w-full h-64 md:h-96 object-cover"
+        >
+      </div>
+
+      <div class="flex items-center gap-2 mb-4 flex-wrap">
+        <span
+          class="inline-block px-3 py-1 text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 rounded-full"
+        >
+          {{ post.category.name }}
+        </span>
         <span
           v-for="tag in post.tags"
-          :key="tag"
+          :key="tag.id"
           class="inline-block px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full"
         >
-          {{ tag }}
+          {{ tag.name }}
         </span>
       </div>
       
@@ -17,15 +63,17 @@
       </h1>
       
       <p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
-        {{ post.description }}
+        {{ post.excerpt }}
       </p>
       
       <div class="flex items-center justify-between text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-800 pb-6">
-        <div class="flex items-center space-x-4">
-          <time :datetime="post.pubDate" class="text-sm">
-            Published {{ formatDate(post.pubDate) }}
+        <div class="flex items-center space-x-4 flex-wrap">
+          <span class="text-sm font-medium">By {{ post.author.displayName }}</span>
+          <time :datetime="post.updatedAt" class="text-sm">
+            {{ formatDate(post.updatedAt) }}
           </time>
-          <span class="text-sm">{{ post.readTime }} min read</span>
+          <span class="text-sm">{{ post.readingTimeMinutes }} min read</span>
+          <span class="text-sm">{{ post.viewCount }} views</span>
         </div>
         
         <div class="flex items-center space-x-2">
@@ -52,10 +100,36 @@
       </div>
     </header>
 
-    <!-- Post Content -->
-    <article class="prose prose-lg dark:prose-invert max-w-none mb-12">
-      <div v-html="post.content"></div>
+    <!-- Post Content - Render HTML from API -->
+    <article class="prose prose-lg max-w-none mb-12 prose-gray dark:prose-invert prose-headings:text-gray-900 dark:prose-headings:text-white prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-strong:text-gray-900 dark:prose-strong:text-white prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-gray-800 dark:prose-code:text-gray-200 prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800 prose-blockquote:text-gray-700 dark:prose-blockquote:text-gray-300 prose-li:text-gray-700 dark:prose-li:text-gray-300">
+      <div v-html="post.contentHtml"></div>
     </article>
+
+    <!-- Attachments -->
+    <div v-if="post.attachments && post.attachments.length > 0" class="mb-8">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Attachments</h3>
+      <div class="space-y-2">
+        <a 
+          v-for="attachment in post.attachments"
+          :key="attachment.id"
+          :href="getAttachmentUrl(attachment.storagePath)"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+        >
+          <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ attachment.originalFilename }}</p>
+            <p class="text-xs text-gray-500">{{ formatFileSize(attachment.fileSize) }}</p>
+          </div>
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
 
     <!-- Post Footer -->
     <footer class="border-t border-gray-200 dark:border-gray-800 pt-8">
@@ -65,11 +139,11 @@
         <div class="flex flex-wrap gap-2">
           <RouterLink
             v-for="tag in post.tags"
-            :key="tag"
-            :to="`/tags/${tag.toLowerCase()}`"
+            :key="tag.id"
+            :to="`/tags/${tag.slug}`"
             class="inline-block px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-full hover:bg-blue-100 hover:text-blue-800 dark:hover:bg-blue-900 dark:hover:text-blue-200 transition-colors"
           >
-            {{ tag }}
+            {{ tag.name }}
           </RouterLink>
         </div>
       </div>
@@ -112,23 +186,6 @@
           </svg>
           Back to all posts
         </RouterLink>
-        
-        <div class="flex space-x-4">
-          <button
-            v-if="previousPost"
-            @click="$router.push(`/posts/${previousPost.slug}`)"
-            class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
-          >
-            ← Previous
-          </button>
-          <button
-            v-if="nextPost"
-            @click="$router.push(`/posts/${nextPost.slug}`)"
-            class="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 font-medium"
-          >
-            Next →
-          </button>
-        </div>
       </div>
     </footer>
   </div>
@@ -154,141 +211,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { format } from 'date-fns'
+import { postsApi } from '@/services/api'
+import type { PostDetail } from '@/types'
 
 const props = defineProps<{
   slug: string
 }>()
 
+// State
+const post = ref<PostDetail | null>(null)
+const loading = ref(true)
+const error = ref<string | null>(null)
 const isBookmarked = ref(false)
-
-// Sample post data - in a real app, this would be fetched from an API or CMS
-const allPosts = [
-  {
-    slug: 'getting-started-vue-3',
-    title: 'Getting Started with Vue 3 and TypeScript',
-    description: 'Learn how to set up a modern Vue 3 project with TypeScript, Vite, and best practices for scalable development.',
-    content: `
-      <h2>Introduction</h2>
-      <p>Vue 3 represents a significant evolution in the Vue.js ecosystem, bringing improved performance, better TypeScript support, and a more flexible architecture. In this comprehensive guide, we'll explore how to set up a modern Vue 3 project with TypeScript and establish best practices for scalable development.</p>
-      
-      <h2>Why Vue 3 and TypeScript?</h2>
-      <p>The combination of Vue 3 and TypeScript offers several compelling advantages:</p>
-      <ul>
-        <li><strong>Type Safety:</strong> Catch errors at compile time rather than runtime</li>
-        <li><strong>Better IDE Support:</strong> Enhanced autocomplete, refactoring, and navigation</li>
-        <li><strong>Improved Performance:</strong> Vue 3's Composition API and TypeScript's optimizations</li>
-        <li><strong>Scalability:</strong> Better code organization for large applications</li>
-      </ul>
-
-      <h2>Setting Up Your Development Environment</h2>
-      <p>Before we dive into creating our Vue 3 + TypeScript project, let's ensure we have the right tools installed.</p>
-      
-      <h3>Prerequisites</h3>
-      <ul>
-        <li>Node.js (version 16 or higher)</li>
-        <li>npm or yarn package manager</li>
-        <li>A code editor with TypeScript support (VS Code recommended)</li>
-      </ul>
-
-      <h2>Creating Your First Vue 3 + TypeScript Project</h2>
-      <p>The easiest way to get started is using Vite, which provides excellent TypeScript support out of the box:</p>
-      
-      <pre><code>npm create vue@latest my-vue-app
-cd my-vue-app
-npm install
-npm run dev</code></pre>
-
-      <p>This command will create a new Vue 3 project with TypeScript configured and ready to use.</p>
-
-      <h2>Project Structure Best Practices</h2>
-      <p>A well-organized project structure is crucial for maintainability. Here's a recommended structure:</p>
-      
-      <pre><code>src/
-  components/        # Reusable components
-    common/         # Generic components
-    ui/            # UI-specific components
-  views/            # Page components
-  composables/      # Vue 3 composables
-  utils/           # Utility functions
-  types/           # TypeScript type definitions
-  stores/          # State management
-  assets/          # Static assets</code></pre>
-
-      <h2>Conclusion</h2>
-      <p>Vue 3 with TypeScript provides a powerful foundation for building modern web applications. By following the best practices outlined in this guide, you'll be well-equipped to create scalable, maintainable applications that leverage the full power of both technologies.</p>
-    `,
-    tags: ['Vue', 'TypeScript', 'Frontend'],
-    pubDate: '2024-01-15T00:00:00Z',
-    readTime: 8
-  },
-  {
-    slug: 'tailwind-css-tips',
-    title: '10 Tailwind CSS Tips for Better UI Design',
-    description: 'Discover advanced Tailwind CSS techniques to create beautiful and responsive user interfaces.',
-    content: `
-      <h2>Introduction</h2>
-      <p>Tailwind CSS has revolutionized how we approach utility-first styling. While it's easy to get started with Tailwind, mastering its advanced features can significantly improve your UI design workflow and results.</p>
-      
-      <h2>1. Custom Color Palettes</h2>
-      <p>Don't rely solely on Tailwind's default colors. Create custom color palettes that match your brand:</p>
-      
-      <pre><code>// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      colors: {
-        brand: {
-          50: '#eff6ff',
-          500: '#3b82f6',
-          900: '#1e3a8a',
-        }
-      }
-    }
-  }
-}</code></pre>
-
-      <h2>2. Utilize Component Classes</h2>
-      <p>For repeated patterns, create component classes using @apply directive:</p>
-      
-      <pre><code>.btn-primary {
-  @apply px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
-}</code></pre>
-
-      <h2>3. Responsive Design Made Easy</h2>
-      <p>Tailwind's responsive utilities make it simple to create adaptive layouts:</p>
-      
-      <pre><code>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"&gt;
-  &lt;!-- Your content --&gt;
-&lt;/div&gt;</code></pre>
-
-      <h2>Conclusion</h2>
-      <p>These tips will help you create more maintainable and beautiful UIs with Tailwind CSS. Remember, the key is to balance utility classes with custom components for optimal results.</p>
-    `,
-    tags: ['CSS', 'Design', 'Tailwind'],
-    pubDate: '2024-01-10T00:00:00Z',
-    readTime: 6
-  }
-]
-
-const post = computed(() => {
-  return allPosts.find(p => p.slug === props.slug)
-})
-
-const currentIndex = computed(() => {
-  return allPosts.findIndex(p => p.slug === props.slug)
-})
-
-const previousPost = computed(() => {
-  const index = currentIndex.value
-  return index > 0 ? allPosts[index - 1] : null
-})
-
-const nextPost = computed(() => {
-  const index = currentIndex.value
-  return index < allPosts.length - 1 ? allPosts[index + 1] : null
-})
 
 const shareButtons = [
   { name: 'Twitter' },
@@ -296,19 +232,60 @@ const shareButtons = [
   { name: 'Copy Link' }
 ]
 
+// Fetch post by slug
+const fetchPost = async () => {
+  loading.value = true
+  error.value = null
+  post.value = null
+  
+  try {
+    post.value = await postsApi.getBySlug(props.slug)
+    
+    // Check bookmark status from localStorage
+    const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]')
+    isBookmarked.value = bookmarks.includes(props.slug)
+    
+    // Update page title
+    if (post.value) {
+      document.title = `${post.value.title}`
+    }
+  } catch (e) {
+    error.value = e instanceof Error ? e.message : 'Failed to load post'
+  } finally {
+    loading.value = false
+  }
+}
+
+// Watch for slug changes (navigation between posts)
+watch(() => props.slug, fetchPost)
+
+onMounted(fetchPost)
+
 const formatDate = (dateString: string) => {
   return format(new Date(dateString), 'MMMM dd, yyyy')
+}
+
+const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+}
+
+const getAttachmentUrl = (storagePath: string) => {
+  // Base URL for MinIO storage
+  return `https://minioconsole.grummans.me/${storagePath}`
 }
 
 const sharePost = () => {
   if (navigator.share && post.value) {
     navigator.share({
       title: post.value.title,
-      text: post.value.description,
+      text: post.value.excerpt,
       url: window.location.href
     })
   } else {
-    // Fallback: copy to clipboard
     navigator.clipboard.writeText(window.location.href)
   }
 }
@@ -334,11 +311,15 @@ const shareOn = (platform: string) => {
 
 const toggleBookmark = () => {
   isBookmarked.value = !isBookmarked.value
-  // In a real app, you'd save this to localStorage or a backend
+  
+  // Save to localStorage
+  const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]')
+  if (isBookmarked.value) {
+    bookmarks.push(props.slug)
+  } else {
+    const index = bookmarks.indexOf(props.slug)
+    if (index > -1) bookmarks.splice(index, 1)
+  }
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks))
 }
-
-onMounted(() => {
-  // In a real app, you might track page views here
-  console.log(`Viewing post: ${props.slug}`)
-})
 </script>

@@ -3,7 +3,7 @@
     <div class="container mx-auto px-4 py-12">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">GrummansBlog</h3>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Grummans Blog</h3>
           <p class="text-gray-600 dark:text-gray-400 mb-4">
             A modern blog built with Vue 3, TypeScript, and Tailwind CSS. 
             Sharing thoughts on technology, development, and more.
@@ -55,7 +55,7 @@
       
       <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-900 text-center">
         <p class="text-gray-600 dark:text-gray-400">
-          © {{ currentYear }} GrummansBlog. Built with ❤️ using Vue 3 and Tailwind CSS.
+          © {{ currentYear }} Grummans Blog. Built with ❤️ using Vue 3 and Tailwind CSS.
         </p>
       </div>
     </div>
