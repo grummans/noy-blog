@@ -5,7 +5,7 @@
     </div>
 
     <div class="prose prose-lg dark:prose-invert max-w-none">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+      <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-8">
         <div class="flex flex-col md:flex-row gap-8 items-start">
           <div class="flex-shrink-0">
             <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
@@ -63,7 +63,7 @@
                 :href="social.url" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                class="inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               >
                 <!-- GitHub Icon -->
                 <svg v-if="social.name === 'GitHub'" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">

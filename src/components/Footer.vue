@@ -1,5 +1,5 @@
 <template>
-  <footer class="mt-20 border-t border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+  <footer class="mt-20 border-t border-gray-200 dark:border-gray-900 bg-gray-50 dark:bg-black">
     <div class="container mx-auto px-4 py-12">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
@@ -53,7 +53,7 @@
         </div>
       </div>
       
-      <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 text-center">
+      <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-900 text-center">
         <p class="text-gray-600 dark:text-gray-400">
           © {{ currentYear }} GrummansBlog. Built with ❤️ using Vue 3 and Tailwind CSS.
         </p>

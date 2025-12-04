@@ -20,7 +20,7 @@
         {{ post.description }}
       </p>
       
-      <div class="flex items-center justify-between text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 pb-6">
+      <div class="flex items-center justify-between text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-800 pb-6">
         <div class="flex items-center space-x-4">
           <time :datetime="post.pubDate" class="text-sm">
             Published {{ formatDate(post.pubDate) }}
@@ -31,7 +31,7 @@
         <div class="flex items-center space-x-2">
           <button 
             @click="sharePost"
-            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
             title="Share this post"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,7 +41,7 @@
           
           <button 
             @click="toggleBookmark"
-            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
             :title="isBookmarked ? 'Remove bookmark' : 'Bookmark this post'"
           >
             <svg class="w-5 h-5" :class="isBookmarked ? 'fill-current text-blue-600' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@
     </article>
 
     <!-- Post Footer -->
-    <footer class="border-t border-gray-200 dark:border-gray-700 pt-8">
+    <footer class="border-t border-gray-200 dark:border-gray-800 pt-8">
       <!-- Tags -->
       <div class="mb-8">
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tags</h3>
@@ -67,7 +67,7 @@
             v-for="tag in post.tags"
             :key="tag"
             :to="`/tags/${tag.toLowerCase()}`"
-            class="inline-block px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 rounded-full hover:bg-blue-100 hover:text-blue-800 dark:hover:bg-blue-900 dark:hover:text-blue-200 transition-colors"
+            class="inline-block px-3 py-1 text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300 rounded-full hover:bg-blue-100 hover:text-blue-800 dark:hover:bg-blue-900 dark:hover:text-blue-200 transition-colors"
           >
             {{ tag }}
           </RouterLink>
@@ -82,7 +82,7 @@
             v-for="platform in shareButtons"
             :key="platform.name"
             @click="shareOn(platform.name)"
-            class="flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+            class="flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
           >
             <!-- Twitter Icon -->
             <svg v-if="platform.name === 'Twitter'" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">

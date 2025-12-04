@@ -19,7 +19,7 @@
           v-model="searchQuery"
           type="text"
           placeholder="Search posts, tags, or topics..."
-          class="block w-full pl-10 pr-4 py-4 text-lg border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
+          class="block w-full pl-10 pr-4 py-4 text-lg border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-900 dark:text-white"
           @input="performSearch"
         >
       </div>
@@ -33,7 +33,7 @@
           class="px-4 py-2 rounded-lg border transition-colors"
           :class="selectedFilter === filter.value 
             ? 'bg-blue-600 text-white border-blue-600' 
-            : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'"
+            : 'bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'"
         >
           {{ filter.label }}
         </button>
@@ -55,7 +55,7 @@
         <article
           v-for="result in searchResults"
           :key="result.slug"
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
+          class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 hover:shadow-md transition-shadow"
         >
           <div class="flex items-center gap-2 mb-3">
             <span
@@ -111,14 +111,14 @@
 
     <!-- Popular Searches / Topics -->
     <div v-else class="space-y-8">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+      <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-8">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Popular Topics</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
             v-for="topic in popularTopics"
             :key="topic"
             @click="searchQuery = topic; performSearch()"
-            class="text-left p-4 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
+            class="text-left p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors group"
           >
             <span class="text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 font-medium">
               {{ topic }}
@@ -127,13 +127,13 @@
         </div>
       </div>
 
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+      <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-8">
         <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Recent Posts</h2>
         <div class="space-y-4">
           <div
             v-for="post in recentPosts"
             :key="post.slug"
-            class="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+            class="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             <div class="flex-1">
               <h3 class="font-medium text-gray-900 dark:text-white mb-1">
