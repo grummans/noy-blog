@@ -286,13 +286,14 @@ const fetchPosts = async () => {
   error.value = null
   
   try {
+    // Temporarily disabled API call, using mock data for testing
     const [postsData, categoriesData] = await Promise.all([
       postsApi.getAll(),
       categoriesApi.getAll()
     ])
-    
     allPosts.value = postsData
     categories.value = categoriesData
+    
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load posts'
   } finally {

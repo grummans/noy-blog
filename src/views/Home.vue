@@ -147,6 +147,9 @@ import { format } from 'date-fns'
 import { postsApi } from '@/services/api'
 import type { PostListItem } from '@/types'
 
+// Default site title
+const SITE_TITLE = 'Grummans Blog'
+
 // State
 const featuredPosts = ref<PostListItem[]>([])
 const loading = ref(true)
@@ -166,7 +169,10 @@ const fetchFeaturedPosts = async () => {
   }
 }
 
-onMounted(fetchFeaturedPosts)
+onMounted(() => {
+  document.title = SITE_TITLE
+  fetchFeaturedPosts()
+})
 
 const formatDate = (dateString: string) => {
   return format(new Date(dateString), 'MMM dd, yyyy')

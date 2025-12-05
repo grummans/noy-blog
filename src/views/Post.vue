@@ -211,10 +211,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { format } from 'date-fns'
 import { postsApi } from '@/services/api'
 import type { PostDetail } from '@/types'
+
+// Default site title
+const SITE_TITLE = 'Grummans Blog'
 
 const props = defineProps<{
   slug: string
@@ -245,9 +248,9 @@ const fetchPost = async () => {
     const bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]')
     isBookmarked.value = bookmarks.includes(props.slug)
     
-    // Update page title
+    // Update page title with post title
     if (post.value) {
-      document.title = `${post.value.title}`
+      document.title = `${post.value.title} | ${SITE_TITLE}`
     }
   } catch (e) {
     error.value = e instanceof Error ? e.message : 'Failed to load post'
@@ -258,6 +261,11 @@ const fetchPost = async () => {
 
 // Watch for slug changes (navigation between posts)
 watch(() => props.slug, fetchPost)
+
+// Reset title when leaving the page
+onUnmounted(() => {
+  document.title = SITE_TITLE
+})
 
 onMounted(fetchPost)
 
