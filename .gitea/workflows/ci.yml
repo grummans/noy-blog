@@ -3,17 +3,20 @@ name: CI
 on:
   push:
     branches: 
-      - dev
+      - develop
+      - main
   pull_request:
     branches: 
-      - dev
+      - develop
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest # Ensure your Gitea runner is configured with this label or Change it to your runner label
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
