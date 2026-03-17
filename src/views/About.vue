@@ -8,14 +8,19 @@
       <div class="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-8">
         <div class="flex flex-col md:flex-row gap-8 items-start">
           <div class="flex-shrink-0">
-            <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
-              G
+            <!-- Điều chỉnh: scale-150 (zoom 1.5x), object-[50%_30%] (crop vào mặt) -->
+            <div class="w-32 h-32 rounded-full overflow-hidden shadow-lg">
+              <img 
+                src="/grab.jpg" 
+                alt="Hai Nguyen" 
+                class="w-full h-full object-cover scale-150 object-[50%_80%]"
+              />
             </div>
           </div>
           
           <div class="flex-1">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Hello, I'm Grummans! 👋
+              Hello, I'm Hai Nguyen! 👋
             </h2>
             
             <p class="text-gray-600 dark:text-gray-400 mb-6">
@@ -30,7 +35,6 @@
             </h3>
             
             <ul class="text-gray-600 dark:text-gray-400 mb-6 space-y-2">
-              <li>Frontend Development with Vue.js, React, and TypeScript</li>
               <li>Backend Development with Node.js and Python</li>
               <li>Cloud Architecture and DevOps practices</li>
               <li>Technical Writing and Community Engagement</li>
