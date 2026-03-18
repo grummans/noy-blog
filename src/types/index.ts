@@ -44,6 +44,13 @@ export interface Attachment {
 }
 
 // Post for listing (from GET /c/posts or GET /c/posts/featured)
+export interface DashboardPost {
+  id: number
+  title: string
+  updatedAt: string
+  slug: string
+}
+
 export interface PostListItem {
   id: number
   title: string

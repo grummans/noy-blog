@@ -16,7 +16,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://blogapi.grummans.me',
+        target: 'http://localhost:8085',
         changeOrigin: true,
         secure: false,
         // Don't rewrite - backend already expects /api prefix
