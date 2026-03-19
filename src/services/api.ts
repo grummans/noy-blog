@@ -1,6 +1,6 @@
-import type { ApiResponse, PostListItem, PostDetail, Category, Tag } from '@/types'
+import type { ApiResponse, PostListItem, PostDetail, Category, Tag, DashboardPost } from '@/types'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8085/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 // Generic fetch wrapper
 async function fetchApi<T>(endpoint: string): Promise<T> {
@@ -24,6 +24,9 @@ export const postsApi = {
   // Get all published posts
   getAll: () => fetchApi<PostListItem[]>('/c/posts'),
   
+  // Get dashboard posts
+  getDashboard: () => fetchApi<DashboardPost[]>('/c/dashboard'),
+
   // Get featured posts (for home page)
   getFeatured: () => fetchApi<PostListItem[]>('/c/posts/featured'),
   

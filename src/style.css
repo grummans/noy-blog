@@ -1,3 +1,29 @@
-@tailwind base;
+﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gruvbox-light-bg text-gruvbox-light-fg font-mono transition-colors duration-300;
+  }
+  
+  html.dark body {
+    @apply bg-gruvbox-dark-bg text-gruvbox-dark-fg;
+  }
+}
+
+@layer utilities {
+  .blinking-cursor {
+    display: inline-block;
+    width: 1ch;
+    height: 1.2em;
+    background-color: currentColor;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
