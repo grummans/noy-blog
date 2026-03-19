@@ -16,7 +16,10 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8085',
+        // For local development, proxy to local backend
+        // target: 'http://localhost:8085', 
+        // For production or staging, proxy to the actual backend server
+        target: 'https://blogapi.grummans.me',
         changeOrigin: true,
         secure: false,
         // Don't rewrite - backend already expects /api prefix
