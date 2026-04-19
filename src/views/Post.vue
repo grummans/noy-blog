@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="max-w-4xl mx-auto font-mono text-sm md:text-base">
     
     <!-- Loading State -->
@@ -49,7 +49,7 @@
 
       <!-- Markdown Article Body -->
       <article class="prose dark:prose-invert max-w-none mb-12">
-        <div v-html="post.contentHtml"></div>
+        <MdPreview :modelValue="post.content || post.contentHtml || ''" :theme="isDark ? 'dark' : 'light'" />
       </article>
 
       <!-- Attachments -->
@@ -84,6 +84,8 @@
   </div>
 </template>
 <script setup lang="ts">
+import { MdPreview } from 'md-editor-v3'
+import 'md-editor-v3/lib/preview.css'
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { format } from 'date-fns'
 import { postsApi } from '../services/api'
@@ -99,6 +101,16 @@ const post = ref<PostDetail | null>(null)
 const loading = ref(true)
 const error = ref<string | null>(null)
 const isBookmarked = ref(false)
+
+const isDark = ref(document.documentElement.classList.contains('dark'))
+
+const observer = new MutationObserver((mutations) => {
+  mutations.forEach((mutation) => {
+    if (mutation.attributeName === 'class') {
+      isDark.value = document.documentElement.classList.contains('dark')
+    }
+  })
+})
 
 const shareButtons = [
   { name: 'Twitter' },
@@ -131,9 +143,13 @@ watch(() => props.slug, fetchPost)
 
 onUnmounted(() => {
   document.title = SITE_TITLE
+  observer.disconnect()
 })
 
-onMounted(fetchPost)
+onMounted(() => {
+  fetchPost()
+  observer.observe(document.documentElement, { attributes: true })
+})
 
 const formatDate = (dateString: string) => {
   return format(new Date(dateString), 'yyyy-MM-dd')
