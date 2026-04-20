@@ -1,4 +1,4 @@
-﻿/** @type {import('tailwindcss').Config} */
+/** @type {import('tailwindcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -79,6 +79,13 @@ export default {
               backgroundColor: theme('colors.gruvbox.dark.bg0_h'),
               color: theme('colors.gruvbox.dark.fg'),
               borderRadius: '0px',
+              padding: '1em',
+            },
+            'pre code': {
+              backgroundColor: 'transparent',
+              color: 'inherit',
+              padding: '0',
+              fontWeight: 'inherit',
             },
             blockquote: {
               borderLeftColor: theme('colors.gruvbox.light.gray'),
