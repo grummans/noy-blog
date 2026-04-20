@@ -33,7 +33,7 @@
             autofocus
           >
         </div>
-        
+
         <!-- Search Filters -->
         <div class="flex flex-wrap gap-4 text-sm">
           <span>--type=</span>
