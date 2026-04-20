@@ -73,7 +73,6 @@ export interface PostDetail {
   isFeatured: boolean
   featuredImageUrl: string
   content: string | null
-  contentHtml: string
   readingTimeMinutes: number
   updatedAt: string
   status: 'PUBLISHED' | 'DRAFT'

@@ -23,7 +23,7 @@
     </div>
 
     <!-- Post Content -->
-    <div v-else-if="post" class="overflow-hidden">
+    <div v-else-if="post" class="overflow-visible">
       <!-- File Metadata / Git Commit Style Header -->
       <header class="mb-8 border border-gruvbox-light-bg4 dark:border-gruvbox-dark-bg4 p-4 text-gruvbox-light-fg dark:text-gruvbox-dark-fg bg-gruvbox-light-bg0_h dark:bg-gruvbox-dark-bg0_h overflow-x-auto whitespace-nowrap">
         <div class="text-gruvbox-light-yellow dark:text-gruvbox-dark-yellow font-bold mb-2 break-normal whitespace-normal text-xl md:text-2xl">
@@ -48,8 +48,8 @@
       </header>
 
       <!-- Markdown Article Body -->
-      <article class="prose dark:prose-invert max-w-none mb-12">
-        <MdPreview :modelValue="post.content || post.contentHtml || ''" :theme="isDark ? 'dark' : 'light'" />
+      <article class="prose dark:prose-invert max-w-none mb-12 markdown-body">
+        <div v-html="parsedContent" @click="handleContentClick"></div>
       </article>
 
       <!-- Attachments -->
@@ -84,12 +84,11 @@
   </div>
 </template>
 <script setup lang="ts">
-import { MdPreview } from 'md-editor-v3'
-import 'md-editor-v3/lib/preview.css'
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
 import { format } from 'date-fns'
 import { postsApi } from '../services/api'
 import type { PostDetail } from '../types'
+import { renderMarkdown } from '../utils/markdownRenderer'
 
 const SITE_TITLE = 'Grummans Blog'
 
@@ -117,6 +116,10 @@ const shareButtons = [
   { name: 'LinkedIn' },
   { name: 'Copy Link' }
 ]
+
+const parsedContent = computed(() => {
+  return renderMarkdown(post.value?.content ?? '')
+})
 
 const fetchPost = async () => {
   loading.value = true
@@ -167,6 +170,30 @@ const getAttachmentUrl = (storagePath: string) => {
   return `https://minioconsole.grummans.me/${storagePath}`
 }
 
+const handleContentClick = async (e: MouseEvent) => {
+  const target = e.target as HTMLElement
+  if (target.classList.contains('copy-code-btn')) {
+    const container = target.closest('.code-block-container')
+    if (!container) return
+    const codeEl = container.querySelector('code')
+    if (!codeEl) return
+
+    try {
+      await navigator.clipboard.writeText(codeEl.innerText)
+      const originalText = target.innerText
+      target.innerText = 'Copied!'
+      target.classList.add('text-gruvbox-light-green', 'dark:text-gruvbox-dark-green')
+      setTimeout(() => {
+        target.innerText = originalText
+        target.classList.remove('text-gruvbox-light-green', 'dark:text-gruvbox-dark-green')
+      }, 2000)
+    } catch (err) {
+      console.error('Failed to copy code:', err)
+      target.innerText = 'Failed'
+    }
+  }
+}
+
 const shareOn = (platform: string) => {
   if (!post.value) return
 
@@ -198,3 +225,49 @@ const toggleBookmark = () => {
   localStorage.setItem('bookmarks', JSON.stringify(bookmarks))
 }
 </script>
+
+<style scoped>
+/* Fine-tune prose list offset, particularly for double-digit ordered lists */
+:deep(.markdown-body ol),
+:deep(.markdown-body ul) {
+  list-style-position: outside !important;
+  padding-left: 2.5em !important; /* more padding to avoid cut-off numbers */
+}
+:deep(.markdown-body li) {
+  margin-left: 0;
+  padding-left: 0.25em;
+}
+
+/* Fine-tune prose code block margins to make the container stand out */
+:deep(.markdown-body pre),
+:deep(.markdown-body pre.hljs) {
+  margin: 1.5em 0 !important;
+  border-radius: 0.5rem !important;
+  padding: 1.25em !important;
+  /* Use a slightly darker/different background than the main #282828 body so it forms a visible box */
+  background-color: #1d2021 !important; 
+  border: 1px solid #3c3836 !important;
+  overflow-x: auto !important;
+}
+
+/* Fix up the fenced code block container specifically so the <pre> inside doesn't double-margin/double-border */
+:deep(.markdown-body .code-block-container pre),
+:deep(.markdown-body .code-block-container pre.hljs) {
+  margin: 0 !important;
+  border-radius: 0 0 0.5rem 0.5rem !important;
+  border: none !important;
+  border-top: 1px solid #3c3836 !important;
+}
+
+:deep(.markdown-body code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+:deep(.markdown-body pre code),
+:deep(.markdown-body pre.hljs code) {
+  background-color: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border-width: 0 !important;
+}
+</style>
