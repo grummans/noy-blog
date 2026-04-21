@@ -12,7 +12,7 @@
         <span class="text-gruvbox-light-gray dark:text-gruvbox-dark-gray">/* TODO: I have many things to do */</span>
       </p>
       <p>
-        Hi, I'm Grummans. This is my personal blog built with Vue 3, Tailwind CSS, and a whole lot of Neovim style minimal enthusiasm. I write about software development, tech trends, and whatever catches my attention.
+        Hi, I'm Grummans. This is my personal blog built with a whole lot of Neovim style minimal enthusiasm. I write about software development, tech trends, and whatever catches my attention.
       </p>
 
       <h2 class="text-gruvbox-light-green dark:text-gruvbox-dark-green mt-8 font-bold">Contact</h2>
