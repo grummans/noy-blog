@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="max-w-4xl mx-auto font-mono text-sm md:text-base">
     
     <!-- Loading State -->
@@ -49,7 +49,7 @@
 
       <!-- Markdown Article Body -->
       <article class="prose dark:prose-invert max-w-none mb-12 markdown-body">
-        <div v-html="parsedContent" @click="handleContentClick"></div>
+        <div :key="isDark.toString()" v-html="parsedContent" @click="handleContentClick"></div>
       </article>
 
       <!-- Attachments -->
@@ -84,11 +84,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref, onMounted, onUnmounted, watch } from 'vue'
+import { computed, ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { format } from 'date-fns'
 import { postsApi } from '../services/api'
 import type { PostDetail } from '../types'
 import { renderMarkdown } from '../utils/markdownRenderer'
+import mermaid from 'mermaid'
 
 const SITE_TITLE = 'Grummans Blog'
 
@@ -120,6 +121,29 @@ const shareButtons = [
 const parsedContent = computed(() => {
   return renderMarkdown(post.value?.content ?? '')
 })
+
+watch([parsedContent, isDark], async () => {
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: isDark.value ? 'dark' : 'default',
+    securityLevel: 'loose',
+  })
+  await nextTick()
+  try {
+    const mermaidElements = document.querySelectorAll('.mermaid')
+    if (mermaidElements.length > 0) {
+      mermaidElements.forEach(el => {
+        el.removeAttribute('data-processed')
+      })
+      await mermaid.run({
+        querySelector: '.mermaid',
+        suppressErrors: true
+      })
+    }
+  } catch (e) {
+    console.error('Mermaid render error:', e)
+  }
+}, { flush: 'post' })
 
 const fetchPost = async () => {
   loading.value = true
@@ -239,15 +263,27 @@ const toggleBookmark = () => {
 }
 
 /* Fine-tune prose code block margins to make the container stand out */
-:deep(.markdown-body pre),
-:deep(.markdown-body pre.hljs) {
+:deep(.markdown-body pre:not(.mermaid)),
+:deep(.markdown-body pre.hljs:not(.mermaid)) {
   margin: 1.5em 0 !important;
   border-radius: 0.5rem !important;
   padding: 1.25em !important;
-  /* Use a slightly darker/different background than the main #282828 body so it forms a visible box */
-  background-color: #1d2021 !important; 
-  border: 1px solid #3c3836 !important;
+  background-color: theme('colors.gruvbox.light.bg0_h') !important; 
+  border: 1px solid theme('colors.gruvbox.light.bg2') !important;
   overflow-x: auto !important;
+}
+
+html.dark :deep(.markdown-body pre:not(.mermaid)),
+html.dark :deep(.markdown-body pre.hljs:not(.mermaid)) {
+  background-color: theme('colors.gruvbox.dark.bg0_h') !important; 
+  border: 1px solid theme('colors.gruvbox.dark.bg1') !important;
+}
+
+:deep(.markdown-body pre.mermaid) {
+  background-color: transparent !important;
+  border: none !important;
+  display: flex;
+  padding: 1rem;
 }
 
 /* Fix up the fenced code block container specifically so the <pre> inside doesn't double-margin/double-border */
@@ -256,7 +292,7 @@ const toggleBookmark = () => {
   margin: 0 !important;
   border-radius: 0 0 0.5rem 0.5rem !important;
   border: none !important;
-  border-top: 1px solid #3c3836 !important;
+  background-color: transparent !important;
 }
 
 :deep(.markdown-body code) {

@@ -9,7 +9,7 @@ import markdownItMark from 'markdown-it-mark'
 import markdownItSub from 'markdown-it-sub'
 import markdownItSup from 'markdown-it-sup'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/base16/gruvbox-dark-medium.css'
+import '../assets/highlight-gruvbox.css'
 
 const escapeHtml = (unsafe: string) => {
       return unsafe
@@ -49,6 +49,12 @@ md.renderer.rules.fence = function (tokens, idx, options) {
   const langName = info.split(/\s+/g)[0];
   const safeLang = langName || 'text';
   
+  if (safeLang === 'mermaid') {
+    return `<div class="code-block-container my-6 rounded-lg border border-gruvbox-light-bg2 dark:border-gruvbox-dark-bg1 bg-gruvbox-light-bg0_h dark:bg-gruvbox-dark-bg0_h overflow-hidden">
+      <pre class="mermaid !m-0 !bg-transparent">${escapeHtml(token.content)}</pre>
+    </div>\n`;
+  }
+
   let highlighted = '';
   if (options.highlight) {
     highlighted = options.highlight(token.content, langName, '') || escapeHtml(token.content);
@@ -56,10 +62,10 @@ md.renderer.rules.fence = function (tokens, idx, options) {
     highlighted = escapeHtml(token.content);
   }
 
-  return `<div class="code-block-container my-6 rounded-lg border border-[#3c3836] bg-[#1d2021] overflow-hidden">
-    <div class="flex justify-between items-center px-4 py-2 bg-[#32302f] text-[#a89984] text-xs font-sans font-bold uppercase border-b border-[#3c3836]">
+  return `<div class="code-block-container my-6 rounded-lg border border-gruvbox-light-bg2 dark:border-gruvbox-dark-bg1 bg-gruvbox-light-bg0_h dark:bg-gruvbox-dark-bg0_h overflow-hidden">
+    <div class="flex justify-between items-center px-4 py-2 bg-gruvbox-light-bg0_s dark:bg-gruvbox-dark-bg0_s text-gruvbox-light-gray dark:text-gruvbox-dark-gray text-xs font-sans font-bold uppercase border-b border-gruvbox-light-bg2 dark:border-gruvbox-dark-bg1">
       <span>${safeLang}</span>
-      <button class="copy-code-btn hover:text-[#ebdbb2] transition-colors" type="button">Copy</button>
+      <button class="copy-code-btn hover:text-gruvbox-light-fg dark:hover:text-gruvbox-dark-fg transition-colors" type="button">Copy</button>
     </div>
     <pre class="hljs !m-0 !border-0 !rounded-none !bg-transparent"><code class="language-${safeLang}">${highlighted}</code></pre>
   </div>\n`;

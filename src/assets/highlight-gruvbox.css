@@ -1,0 +1,70 @@
+:root {
+  --base00: #fbf1c7;
+  --base01: #ebdbb2;
+  --base02: #d5c4a1;
+  --base03: #bdae93;
+  --base04: #665c54;
+  --base05: #504945;
+  --base06: #3c3836;
+  --base07: #282828;
+  --base08: #9d0006;
+  --base09: #af3a03;
+  --base0A: #b57614;
+  --base0B: #79740e;
+  --base0C: #427b58;
+  --base0D: #076678;
+  --base0E: #8f3f71;
+  --base0F: #d65d0e;
+}
+
+html.dark {
+  --base00: #282828;
+  --base01: #3c3836;
+  --base02: #504945;
+  --base03: #665c54;
+  --base04: #bdae93;
+  --base05: #d5c4a1;
+  --base06: #ebdbb2;
+  --base07: #fbf1c7;
+  --base08: #fb4934;
+  --base09: #fe8019;
+  --base0A: #fabd2f;
+  --base0B: #b8bb26;
+  --base0C: #8ec07c;
+  --base0D: #83a598;
+  --base0E: #d3869b;
+  --base0F: #d65d0e;
+}
+
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+}
+code.hljs {
+  padding: 3px 5px;
+}
+.hljs {
+  color: var(--base05);
+  background: transparent;
+}
+.hljs::selection,
+.hljs ::selection {
+  background-color: var(--base02);
+  color: var(--base05);
+}
+.hljs-comment { color: var(--base03) }
+.hljs-tag { color: var(--base04) }
+.hljs-subst, .hljs-punctuation, .hljs-operator { color: var(--base05) }
+.hljs-operator { opacity: 0.7 }
+.hljs-bullet, .hljs-variable, .hljs-template-variable, .hljs-selector-tag, .hljs-name, .hljs-deletion { color: var(--base08) }
+.hljs-symbol, .hljs-number, .hljs-link, .hljs-attr, .hljs-variable.constant_, .hljs-literal { color: var(--base09) }
+.hljs-title, .hljs-class .hljs-title, .hljs-title.class_ { color: var(--base0A) }
+.hljs-strong { font-weight: bold; color: var(--base0A) }
+.hljs-code, .hljs-addition, .hljs-title.class_.inherited__, .hljs-string { color: var(--base0B) }
+.hljs-built_in, .hljs-doctag, .hljs-quote, .hljs-keyword.hljs-atrule, .hljs-regexp { color: var(--base0C) }
+.hljs-function .hljs-title, .hljs-attribute, .ruby .hljs-property, .hljs-title.function_, .hljs-section { color: var(--base0D) }
+.hljs-type, .hljs-template-tag, .diff .hljs-meta, .hljs-keyword { color: var(--base0E) }
+.hljs-emphasis { color: var(--base0E); font-style: italic }
+.hljs-meta, .hljs-meta .hljs-keyword, .hljs-meta .hljs-string { color: var(--base0F) }
+.hljs-meta .hljs-keyword, .hljs-meta-keyword { font-weight: bold }
